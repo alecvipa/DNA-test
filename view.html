@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <title>Test de ADN - Express</title>
+  <!-- Latest compiled and minified CSS & JS -->
+  <link rel="stylesheet"
+    href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+  <link rel="stylesheet"
+    href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+  <script src="https://code.jquery.com/jquery.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+
+</head>
+
+<body>
+
+  <div class="container">
+    <div class="jumbotron">
+      <h1>Test de ADN</h1>
+      <h3>Este test está diseñado para detectar diferencias genéticas según tu cadena de ADN</h3>
+      <hr>
+      <a href="/add"><button class="btn btn-danger btn-lg"><span class="fa fa-plus"></span> Agregar modelos</button></a>
+      <a href="/api"><button class="btn btn-danger btn-lg"><span
+            class="fa fa-eye"></span> Ver secuencias guardadas</button></a>
+    </div>
+    <div class="row">
+
+      <div class="col-12">
+
+        <div class="card mb-4">
+          <div class="card-header">
+            <h3><strong>Buscar coincidencia</strong></h3>
+          </div>
+          <div class="card-body">
+            <input type="text" id="character-search" class="form-control">
+            <br>
+            <div class="text-right">
+              <button type="submit" class="btn btn-primary btn-md" id="search-btn"><span
+                  class="fa fa-search"></span> Probar cadena de ADN</button>
+
+            </div>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-header">
+            <h3><strong>Cadena de ADN</strong></h3>
+          </div>
+          <div class="card-body">
+            <h2 id="name">ADN Modelo</h2>
+            <div id="stats">
+              <h3><strong>Secuencia:</strong> <span id="sequence"></span></h3>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script type="text/javascript">
+    $("#search-btn").on("click", function() {
+      var searchedDna = $("#character-search").val().trim();
+
+      searchedDna = searchedDna.replace(/\s+/g, "");
+
+      console.log(searchedDna);
+
+      $.get("/api/" + searchedDna, function(data) {
+        console.log(data);
+        if (data === "Cadena de ADN diferente") {
+          $("#stats").hide();
+          $("#name").text(data);
+
+        } else if(data) {
+          $("#stats").show();
+          $("#name").text("¡Encontramos coincidencia!");
+          $("#sequence").text(data.model);
+          
+        }
+      });
+    });
+
+  </script>
+</body>
+
+</html>
